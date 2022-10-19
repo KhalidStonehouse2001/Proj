@@ -1,0 +1,76 @@
+"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+(() => {
+var exports = {};
+exports.id = "pages/api/checkout_sessions";
+exports.ids = ["pages/api/checkout_sessions"];
+exports.modules = {
+
+/***/ "@sanity/image-url":
+/*!************************************!*\
+  !*** external "@sanity/image-url" ***!
+  \************************************/
+/***/ ((module) => {
+
+module.exports = require("@sanity/image-url");
+
+/***/ }),
+
+/***/ "next-sanity":
+/*!******************************!*\
+  !*** external "next-sanity" ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = require("next-sanity");
+
+/***/ }),
+
+/***/ "stripe":
+/*!*************************!*\
+  !*** external "stripe" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = require("stripe");
+
+/***/ }),
+
+/***/ "(api)/./pages/api/checkout_sessions.ts":
+/*!****************************************!*\
+  !*** ./pages/api/checkout_sessions.ts ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ handler)\n/* harmony export */ });\n/* harmony import */ var stripe__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! stripe */ \"stripe\");\n/* harmony import */ var stripe__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(stripe__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _sanity__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../sanity */ \"(api)/./sanity.js\");\n// Next.js API route support: https://nextjs.org/docs/api-routes/introduction\n\n\nconst stripe = new (stripe__WEBPACK_IMPORTED_MODULE_0___default())(process.env.STRIPE_SECRET_KEY, {\n    // https://github.com/stripe/stripe-node#configuration\n    apiVersion: \"2022-08-01\"\n});\nasync function handler(req, res) {\n    if (req.method === \"POST\") {\n        const items = req.body.items;\n        // This is the shape in which stripe expects the data to be\n        const transformedItems = items.map((item)=>({\n                price_data: {\n                    currency: \"GBP\",\n                    product_data: {\n                        name: item.title,\n                        images: [\n                            (0,_sanity__WEBPACK_IMPORTED_MODULE_1__.urlFor)(item.image[0]).url()\n                        ]\n                    },\n                    unit_amount: item.price * 100\n                },\n                quantity: 1\n            }));\n        try {\n            // Create Checkout Sessions from body params\n            const params = {\n                payment_method_types: [\n                    \"card\"\n                ],\n                // shipping_address_collection: {\n                //   allowed_countries: [\"US\", \"CA\", \"GB\"],\n                // },\n                line_items: transformedItems,\n                payment_intent_data: {},\n                mode: \"payment\",\n                success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,\n                cancel_url: `${req.headers.origin}/checkout`,\n                metadata: {\n                    images: JSON.stringify(items.map((item)=>item.image[0].asset.url))\n                }\n            };\n            const checkoutSession = await stripe.checkout.sessions.create(params);\n            res.status(200).json(checkoutSession);\n        } catch (err) {\n            const errorMessage = err instanceof Error ? err.message : \"Internal server error\";\n            res.status(500).json({\n                statusCode: 500,\n                message: errorMessage\n            });\n        }\n    } else {\n        res.setHeader(\"Allow\", \"POST\");\n        res.status(405).end(\"Method Not Allowed\");\n    }\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,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azovLy8uL3BhZ2VzL2FwaS9jaGVja291dF9zZXNzaW9ucy50cz8wNWFhIl0sInNvdXJjZXNDb250ZW50IjpbIi8vIE5leHQuanMgQVBJIHJvdXRlIHN1cHBvcnQ6IGh0dHBzOi8vbmV4dGpzLm9yZy9kb2NzL2FwaS1yb3V0ZXMvaW50cm9kdWN0aW9uXG5pbXBvcnQgdHlwZSB7IE5leHRBcGlSZXF1ZXN0LCBOZXh0QXBpUmVzcG9uc2UgfSBmcm9tIFwibmV4dFwiO1xuaW1wb3J0IFN0cmlwZSBmcm9tIFwic3RyaXBlXCI7XG5pbXBvcnQgeyB1cmxGb3IgfSBmcm9tIFwiLi4vLi4vc2FuaXR5XCI7XG5pbXBvcnQgeyBQcm9kdWN0VHlwZSB9IGZyb20gXCIuLi8uLi90eXBpbmdzXCI7XG5jb25zdCBzdHJpcGUgPSBuZXcgU3RyaXBlKHByb2Nlc3MuZW52LlNUUklQRV9TRUNSRVRfS0VZISwge1xuICAvLyBodHRwczovL2dpdGh1Yi5jb20vc3RyaXBlL3N0cmlwZS1ub2RlI2NvbmZpZ3VyYXRpb25cbiAgYXBpVmVyc2lvbjogXCIyMDIyLTA4LTAxXCIsXG59KTtcblxuZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihcbiAgcmVxOiBOZXh0QXBpUmVxdWVzdCxcbiAgcmVzOiBOZXh0QXBpUmVzcG9uc2Vcbikge1xuICBpZiAocmVxLm1ldGhvZCA9PT0gXCJQT1NUXCIpIHtcbiAgICBjb25zdCBpdGVtczogUHJvZHVjdFR5cGVbXSA9IHJlcS5ib2R5Lml0ZW1zO1xuXG4gICAgLy8gVGhpcyBpcyB0aGUgc2hhcGUgaW4gd2hpY2ggc3RyaXBlIGV4cGVjdHMgdGhlIGRhdGEgdG8gYmVcbiAgICBjb25zdCB0cmFuc2Zvcm1lZEl0ZW1zID0gaXRlbXMubWFwKChpdGVtKSA9PiAoe1xuICAgICAgcHJpY2VfZGF0YToge1xuICAgICAgICBjdXJyZW5jeTogXCJHQlBcIixcbiAgICAgICAgcHJvZHVjdF9kYXRhOiB7XG4gICAgICAgICAgbmFtZTogaXRlbS50aXRsZSxcbiAgICAgICAgICBpbWFnZXM6IFt1cmxGb3IoaXRlbS5pbWFnZVswXSkudXJsKCldLFxuICAgICAgICB9LFxuICAgICAgICB1bml0X2Ftb3VudDogaXRlbS5wcmljZSAqIDEwMCxcbiAgICAgIH0sXG4gICAgICBxdWFudGl0eTogMSxcbiAgICB9KSk7XG5cbiAgICB0cnkge1xuICAgICAgLy8gQ3JlYXRlIENoZWNrb3V0IFNlc3Npb25zIGZyb20gYm9keSBwYXJhbXNcbiAgICAgIGNvbnN0IHBhcmFtczogU3RyaXBlLkNoZWNrb3V0LlNlc3Npb25DcmVhdGVQYXJhbXMgPSB7XG4gICAgICAgIHBheW1lbnRfbWV0aG9kX3R5cGVzOiBbXCJjYXJkXCJdLFxuICAgICAgICAvLyBzaGlwcGluZ19hZGRyZXNzX2NvbGxlY3Rpb246IHtcbiAgICAgICAgLy8gICBhbGxvd2VkX2NvdW50cmllczogW1wiVVNcIiwgXCJDQVwiLCBcIkdCXCJdLFxuICAgICAgICAvLyB9LFxuICAgICAgICBsaW5lX2l0ZW1zOiB0cmFuc2Zvcm1lZEl0ZW1zLFxuICAgICAgICBwYXltZW50X2ludGVudF9kYXRhOiB7fSxcbiAgICAgICAgbW9kZTogXCJwYXltZW50XCIsXG4gICAgICAgIHN1Y2Nlc3NfdXJsOiBgJHtyZXEuaGVhZGVycy5vcmlnaW59L3N1Y2Nlc3M/c2Vzc2lvbl9pZD17Q0hFQ0tPVVRfU0VTU0lPTl9JRH1gLFxuICAgICAgICBjYW5jZWxfdXJsOiBgJHtyZXEuaGVhZGVycy5vcmlnaW59L2NoZWNrb3V0YCxcbiAgICAgICAgbWV0YWRhdGE6IHtcbiAgICAgICAgICBpbWFnZXM6IEpTT04uc3RyaW5naWZ5KGl0ZW1zLm1hcCgoaXRlbSkgPT4gaXRlbS5pbWFnZVswXS5hc3NldC51cmwpKSxcbiAgICAgICAgfSxcbiAgICAgIH07XG4gICAgICBjb25zdCBjaGVja291dFNlc3Npb246IFN0cmlwZS5DaGVja291dC5TZXNzaW9uID1cbiAgICAgICAgYXdhaXQgc3RyaXBlLmNoZWNrb3V0LnNlc3Npb25zLmNyZWF0ZShwYXJhbXMpO1xuXG4gICAgICByZXMuc3RhdHVzKDIwMCkuanNvbihjaGVja291dFNlc3Npb24pO1xuICAgIH0gY2F0Y2ggKGVycikge1xuICAgICAgY29uc3QgZXJyb3JNZXNzYWdlID1cbiAgICAgICAgZXJyIGluc3RhbmNlb2YgRXJyb3IgPyBlcnIubWVzc2FnZSA6IFwiSW50ZXJuYWwgc2VydmVyIGVycm9yXCI7XG4gICAgICByZXMuc3RhdHVzKDUwMCkuanNvbih7IHN0YXR1c0NvZGU6IDUwMCwgbWVzc2FnZTogZXJyb3JNZXNzYWdlIH0pO1xuICAgIH1cbiAgfSBlbHNlIHtcbiAgICByZXMuc2V0SGVhZGVyKFwiQWxsb3dcIiwgXCJQT1NUXCIpO1xuICAgIHJlcy5zdGF0dXMoNDA1KS5lbmQoXCJNZXRob2QgTm90IEFsbG93ZWRcIik7XG4gIH1cbn1cbiJdLCJuYW1lcyI6WyJTdHJpcGUiLCJ1cmxGb3IiLCJzdHJpcGUiLCJwcm9jZXNzIiwiZW52IiwiU1RSSVBFX1NFQ1JFVF9LRVkiLCJhcGlWZXJzaW9uIiwiaGFuZGxlciIsInJlcSIsInJlcyIsIm1ldGhvZCIsIml0ZW1zIiwiYm9keSIsInRyYW5zZm9ybWVkSXRlbXMiLCJtYXAiLCJpdGVtIiwicHJpY2VfZGF0YSIsImN1cnJlbmN5IiwicHJvZHVjdF9kYXRhIiwibmFtZSIsInRpdGxlIiwiaW1hZ2VzIiwiaW1hZ2UiLCJ1cmwiLCJ1bml0X2Ftb3VudCIsInByaWNlIiwicXVhbnRpdHkiLCJwYXJhbXMiLCJwYXltZW50X21ldGhvZF90eXBlcyIsImxpbmVfaXRlbXMiLCJwYXltZW50X2ludGVudF9kYXRhIiwibW9kZSIsInN1Y2Nlc3NfdXJsIiwiaGVhZGVycyIsIm9yaWdpbiIsImNhbmNlbF91cmwiLCJtZXRhZGF0YSIsIkpTT04iLCJzdHJpbmdpZnkiLCJhc3NldCIsImNoZWNrb3V0U2Vzc2lvbiIsImNoZWNrb3V0Iiwic2Vzc2lvbnMiLCJjcmVhdGUiLCJzdGF0dXMiLCJqc29uIiwiZXJyIiwiZXJyb3JNZXNzYWdlIiwiRXJyb3IiLCJtZXNzYWdlIiwic3RhdHVzQ29kZSIsInNldEhlYWRlciIsImVuZCJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./pages/api/checkout_sessions.ts\n");
+
+/***/ }),
+
+/***/ "(api)/./sanity.js":
+/*!*******************!*\
+  !*** ./sanity.js ***!
+  \*******************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"config\": () => (/* binding */ config),\n/* harmony export */   \"sanityClient\": () => (/* binding */ sanityClient),\n/* harmony export */   \"urlFor\": () => (/* binding */ urlFor)\n/* harmony export */ });\n/* harmony import */ var next_sanity__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! next-sanity */ \"next-sanity\");\n/* harmony import */ var next_sanity__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(next_sanity__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _sanity_image_url__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @sanity/image-url */ \"@sanity/image-url\");\n/* harmony import */ var _sanity_image_url__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_sanity_image_url__WEBPACK_IMPORTED_MODULE_1__);\n\n\nconst config = {\n    dataset: \"production\" || 0,\n    token: process.env.SANITY_API_TOKEN,\n    projectId: \"bhdk2tuk\",\n    apiVersion: \"2021-10-21\",\n    useCdn: \"development\" === \"production\"\n};\n// Set up the client for fetching data in the getProps page functions\nconst sanityClient = (0,next_sanity__WEBPACK_IMPORTED_MODULE_0__.createClient)(config);\n/**\n * Set up a helper function for generating Image URLs with only the asset reference data in your documents.\n * Read more: https://www.sanity.io/docs/image-url\n **/ const urlFor = (source)=>_sanity_image_url__WEBPACK_IMPORTED_MODULE_1___default()(config).image(source);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9zYW5pdHkuanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7OztBQUEyQztBQUNXO0FBRS9DLE1BQU1FLE1BQU0sR0FBRztJQUNwQkMsT0FBTyxFQUFFQyxZQUFzQyxJQUFJLENBQVk7SUFDL0RHLEtBQUssRUFBRUgsT0FBTyxDQUFDQyxHQUFHLENBQUNHLGdCQUFnQjtJQUNuQ0MsU0FBUyxFQUFFTCxVQUF5QztJQUNwRE8sVUFBVSxFQUFFLFlBQVk7SUFDeEJDLE1BQU0sRUFBRVIsYUFSRyxLQVFzQixZQUFZO0NBQzlDLENBQUM7QUFFRixxRUFBcUU7QUFDOUQsTUFBTVMsWUFBWSxHQUFHYix5REFBWSxDQUFDRSxNQUFNLENBQUMsQ0FBQztBQUVqRDs7O0VBR0UsR0FDSyxNQUFNWSxNQUFNLEdBQUcsQ0FBQ0MsTUFBTSxHQUFLZCx3REFBcUIsQ0FBQ0MsTUFBTSxDQUFDLENBQUNjLEtBQUssQ0FBQ0QsTUFBTSxDQUFDLENBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zYW5pdHkuanM/ODVkNCJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBjcmVhdGVDbGllbnQgfSBmcm9tIFwibmV4dC1zYW5pdHlcIjtcbmltcG9ydCBjcmVhdGVJbWFnZVVybEJ1aWxkZXIgZnJvbSBcIkBzYW5pdHkvaW1hZ2UtdXJsXCI7XG5cbmV4cG9ydCBjb25zdCBjb25maWcgPSB7XG4gIGRhdGFzZXQ6IHByb2Nlc3MuZW52Lk5FWFRfUFVCTElDX1NBTklUWV9EQVRBU0VUIHx8IFwicHJvZHVjdGlvblwiLFxuICB0b2tlbjogcHJvY2Vzcy5lbnYuU0FOSVRZX0FQSV9UT0tFTixcbiAgcHJvamVjdElkOiBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19TQU5JVFlfUFJPSkVDVF9JRCxcbiAgYXBpVmVyc2lvbjogXCIyMDIxLTEwLTIxXCIsIC8vIExlYXJuIG1vcmU6IGh0dHBzOi8vd3d3LnNhbml0eS5pby9kb2NzL2FwaS12ZXJzaW9uaW5nXG4gIHVzZUNkbjogcHJvY2Vzcy5lbnYuTk9ERV9FTlYgPT09IFwicHJvZHVjdGlvblwiLFxufTtcblxuLy8gU2V0IHVwIHRoZSBjbGllbnQgZm9yIGZldGNoaW5nIGRhdGEgaW4gdGhlIGdldFByb3BzIHBhZ2UgZnVuY3Rpb25zXG5leHBvcnQgY29uc3Qgc2FuaXR5Q2xpZW50ID0gY3JlYXRlQ2xpZW50KGNvbmZpZyk7XG5cbi8qKlxuICogU2V0IHVwIGEgaGVscGVyIGZ1bmN0aW9uIGZvciBnZW5lcmF0aW5nIEltYWdlIFVSTHMgd2l0aCBvbmx5IHRoZSBhc3NldCByZWZlcmVuY2UgZGF0YSBpbiB5b3VyIGRvY3VtZW50cy5cbiAqIFJlYWQgbW9yZTogaHR0cHM6Ly93d3cuc2FuaXR5LmlvL2RvY3MvaW1hZ2UtdXJsXG4gKiovXG5leHBvcnQgY29uc3QgdXJsRm9yID0gKHNvdXJjZSkgPT4gY3JlYXRlSW1hZ2VVcmxCdWlsZGVyKGNvbmZpZykuaW1hZ2Uoc291cmNlKTtcbiJdLCJuYW1lcyI6WyJjcmVhdGVDbGllbnQiLCJjcmVhdGVJbWFnZVVybEJ1aWxkZXIiLCJjb25maWciLCJkYXRhc2V0IiwicHJvY2VzcyIsImVudiIsIk5FWFRfUFVCTElDX1NBTklUWV9EQVRBU0VUIiwidG9rZW4iLCJTQU5JVFlfQVBJX1RPS0VOIiwicHJvamVjdElkIiwiTkVYVF9QVUJMSUNfU0FOSVRZX1BST0pFQ1RfSUQiLCJhcGlWZXJzaW9uIiwidXNlQ2RuIiwic2FuaXR5Q2xpZW50IiwidXJsRm9yIiwic291cmNlIiwiaW1hZ2UiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(api)/./sanity.js\n");
+
+/***/ })
+
+};
+;
+
+// load runtime
+var __webpack_require__ = require("../../webpack-api-runtime.js");
+__webpack_require__.C(exports);
+var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
+var __webpack_exports__ = (__webpack_exec__("(api)/./pages/api/checkout_sessions.ts"));
+module.exports = __webpack_exports__;
+
+})();
