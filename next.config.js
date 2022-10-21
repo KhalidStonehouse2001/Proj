@@ -9,9 +9,7 @@ module.exports = {
       "lh3.googleusercontent.com",
     ],
   },
-  experimental: {
-    images: {
-      unoptimized: true,
-    },
+  images: {
+    unoptimized: true,
   },
 };
